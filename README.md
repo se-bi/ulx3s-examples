@@ -2,7 +2,7 @@
 
 Getting started with the [ULX3S](https://radiona.org/ulx3s/) is easy! You just need a Verilog source code file and the [constraint file](./doc/constraints/ulx3s_v20.lpf). 
 
-To program the FPGA on the ULX3S, either the commercial [Lattice Diamond](http://www.latticesemi.com/latticediamond) or Open Source tools such as [yosys](https://github.com/YosysHQ/yosys), [nextpnr](https://github.com/YosysHQ/nextpnr) and  [ujprog](https://github.com/f32c/tools/tree/master/ujprog) are needed.
+To program the FPGA on the ULX3S, either the commercial [Lattice Diamond](http://www.latticesemi.com/latticediamond) or Open Source tools such as [yosys](https://github.com/YosysHQ/yosys), [nextpnr](https://github.com/YosysHQ/nextpnr) and  [fujprog](https://github.com/kost/fujprog/releases) are needed.
 
 If you've never worked with FPGA devices, they are programmed with a _hardware definition_ language or "HDL", that may look like a traditional programming language - however it is quite different. The "code" is really just a clever shorthand for how circuits and logic gates are connected. Verilog is one type of HDL. 
 
