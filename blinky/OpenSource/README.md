@@ -2,7 +2,7 @@
 
 This blinky is based on the [ULX3S-Blinky project](https://github.com/DoctorWkt/ULX3S-Blinky) from @Doctorwkt. This example blinks an LED using FPGA code.
 
-It is assumed the yosys, nextpnr toolchain has been already installed. If not, see [instructions here](../../OpenSource-toolchain/README.md)
+It is assumed the yosys, nextpnr toolchain has been already installed. If not, see [instructions here](https://github.com/emard/ulx3s/blob/master/doc/MANUAL.md#precompiled-opensource-tools-for-all-platforms)
 
 Optionally copy a fresh [ulx3s_v20.lpf constraint file](../../doc/constraints/ulx3s_v20.lpf).
 
