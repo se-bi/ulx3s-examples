@@ -4,20 +4,12 @@ This blinky is based on the [ULX3S-Blinky project](https://github.com/DoctorWkt/
 
 It is assumed the yosys, nextpnr toolchain has been already installed. If not, see [instructions here](../../OpenSource-toolchain/README.md)
 
-Optionally copy a fresh [ulx3s_v20.lpf constraint file](../../doc/constraints/ulx3s_v20.lpf).
-
-```
-# assume git clone to ~/workspace/
-cd ~/workspace/ulx3s-examples/blinky/OpenSource
-cp -f ../../doc/constraints/ulx3s_v20.lpf ./ # optionally copy an updated lpf file
-```
-
-On linux, the regular `ujprog` can be used:
+On linux, the regular `fujprog` can be used [fujprog](https://github.com/kost/fujprog/releases):
 
 ```
 make clean
 make ulx3s.bit
-../../bin/ujprog ulx3s.bit
+fujprog ulx3s.bit
 ```
 
 For Windows WSL, there is [no USB support](https://github.com/Microsoft/WSL/issues/2185#issuecomment-306083436) so the linux `ujprog` will not work, but the Windows executable `ujprog.exe` can be used.
