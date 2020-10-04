@@ -79,4 +79,4 @@ blinky.json: blinky.ys blinky.v
 	yosys blinky.ys 
 
 prog: ulx3s.bit
-	../../bin/ujprog ulx3s.bit
+	fujprog ulx3s.bit
