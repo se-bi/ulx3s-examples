@@ -4,36 +4,12 @@ This blinky is based on the [ULX3S-Blinky project](https://github.com/DoctorWkt/
 
 It is assumed the yosys, nextpnr toolchain has been already installed. If not, see [instructions here](https://github.com/emard/ulx3s/blob/master/doc/MANUAL.md#precompiled-opensource-tools-for-all-platforms)
 
-On linux, the regular `fujprog` can be used [fujprog](https://github.com/kost/fujprog/releases):
+On all platforms, the latest `fujprog` can be used [fujprog](https://github.com/kost/fujprog/releases):
 
 ```
 make clean
 make ulx3s.bit
 fujprog ulx3s.bit
-```
-
-For Windows WSL, there is [no USB support](https://github.com/Microsoft/WSL/issues/2185#issuecomment-306083436) so the linux `ujprog` will not work, but the Windows executable `ujprog.exe` can be used.
-
-It is important to note that `ujprog.exe` should only be executed from a non-VoIFS directory in WSL (e.g. /mnt/c/somedirectory...) see [ujprog troubleshooting](https://github.com/f32c/tools/tree/master/ujprog#troubleshooting) and the discussion [here](https://github.com/f32c/tools/pull/9#issuecomment-465693978).
-
-```
-# assume git clone to C:\workspace\
-# Note ujprog.exe does NOT work when launching from WSL VoIFS, so we move to a DOS directory (/mnt/c/....)
-cd /mnt/c/workspace/ulx3s-examples/blinky/OpenSource
-make clean
-make ulx3s.bit
-../../bin/ujprog.exe ulx3s.bit
-```
-
-for the 12F on WSL:
-
-```
-# assume git clone to C:\workspace\
-# Note ujprog.exe does NOT work when launching from WSL VoIFS, so we move to a DOS directory (/mnt/c/....)
-cd /mnt/c/workspace/ulx3s-examples/blinky/OpenSource
-make clean
-make ulx3s.bit -f Makefile.12F
-../../bin/ujprog.exe ulx3s.bit
 ```
 
 See also [other examples](../../README.md)
