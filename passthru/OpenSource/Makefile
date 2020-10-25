@@ -1,6 +1,6 @@
 .PHONY: all
 .DELETE_ON_ERROR:
-TOPMOD  := blinky
+TOPMOD  := passthru
 VLOGFIL := $(TOPMOD).v
 VCDFILE := $(TOPMOD).vcd
 SIMPROG := $(TOPMOD)_tb
@@ -48,7 +48,7 @@ $(VCDFILE): $(SIMPROG)
 ## 
 .PHONY: clean
 clean:
-	rm -rf $(VDIRFB)/ $(SIMPROG) $(VCDFILE) blinky/ $(BINFILE) $(RPTFILE)
+	rm -rf $(VDIRFB)/ $(SIMPROG) $(VCDFILE) $(BINFILE) $(RPTFILE)
 	rm -rf passthru.json ulx3s_out.config ulx3s.bit
 
 ##
