@@ -1,0 +1,52 @@
+stages:
+  - synth_st
+  - pnr_st
+  - pack_st
+
+synth:
+  stage: synth_st
+  image: ghdl/synth:beta
+  before_script:
+    - yosys --version
+  script:
+    - cd blinky/OpenSource
+    - make blinky.json
+  artifacts:
+    paths:
+    - blinky/OpenSource/blinky.json
+    expire_in: 1 week
+
+pnr:
+  stage: pnr_st
+  image: ghdl/synth:nextpnr-ecp5
+  before_script:
+    - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
+    - nextpnr-ecp5 --version
+  script:
+    - cd blinky/OpenSource
+    - ls -ahl .
+    - touch blinky.json
+    - ls -ahl blinky.json
+    - make ulx3s_out.config
+  artifacts:
+    paths:
+    - blinky/OpenSource/ulx3s_out.config
+    expire_in: 1 week
+
+pack:
+  stage: pack_st
+  image: ghdl/synth:trellis
+  before_script:
+    - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
+    - ecppack --version
+  script:
+    - cd blinky/OpenSource
+    - ls -ahl
+    - touch blinky.json
+    - touch ulx3s_out.config
+    - ls -ahl blinky.json
+    - make ulx3s.bit
+  artifacts:
+    paths:
+    - blinky/OpenSource/ulx3s.bit
+    expire_in: 1 week
