@@ -9,11 +9,15 @@ synth:
   before_script:
     - yosys --version
   script:
-    - cd blinky/OpenSource
+    - pushd blinky/OpenSource
     - make blinky.json
+    - popd
+    - pushd passthru/OpenSource
+    - make passthru.json
   artifacts:
     paths:
     - blinky/OpenSource/blinky.json
+    - passthru/OpenSource/passthru.json
     expire_in: 1 week
 
 pnr:
@@ -23,14 +27,16 @@ pnr:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - nextpnr-ecp5 --version
   script:
-    - cd blinky/OpenSource
-    - ls -ahl .
-    - touch blinky.json
-    - ls -ahl blinky.json
+    - touch */*/*.json
+    - pushd blinky/OpenSource
+    - make ulx3s_out.config
+    - popd
+    - pushd passthru/OpenSource
     - make ulx3s_out.config
   artifacts:
     paths:
     - blinky/OpenSource/ulx3s_out.config
+    - passthru/OpenSource/ulx3s_out.config
     expire_in: 1 week
 
 pack:
@@ -40,13 +46,15 @@ pack:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - ecppack --version
   script:
-    - cd blinky/OpenSource
-    - ls -ahl
-    - touch blinky.json
-    - touch ulx3s_out.config
-    - ls -ahl blinky.json
+    - touch */*/*.json
+    - touch */*/ulx3s_out.config
+    - pushd blinky/OpenSource
+    - make ulx3s.bit
+    - popd
+    - pushd passthru/OpenSource
     - make ulx3s.bit
   artifacts:
     paths:
     - blinky/OpenSource/ulx3s.bit
+    - passthru/OpenSource/ulx3s.bit
     expire_in: 1 week
