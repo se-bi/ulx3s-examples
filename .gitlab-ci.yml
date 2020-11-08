@@ -35,7 +35,7 @@ pnr:
 
 pack:
   stage: pack_st
-  image: ghdl/synth:trellis
+  image: se0bi/ghdl-synth:trellis
   before_script:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - ecppack --version
