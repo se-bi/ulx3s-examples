@@ -3,14 +3,9 @@
 
 -- module to bypass user input and usbserial to esp32 wifi
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-
--- use work.f32c_pack.all;
-
-library ecp5u;
-use ecp5u.components.all;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity ulx3s_passthru_wifi is
   generic
@@ -19,37 +14,45 @@ entity ulx3s_passthru_wifi is
   );
   port
   (
-  clk_25mhz: in std_logic;  -- main clock input from 25MHz clock source must be lowercase
+  clk_25MHz: in std_logic;  -- main clock input from 25MHz clock source must be lowercase
 
   -- UART0 (FTDI USB slave serial)
   ftdi_rxd: out   std_logic;
   ftdi_txd: in    std_logic;
   -- FTDI additional signaling
-  ftdi_ndtr: inout  std_logic;
-  ftdi_ndsr: inout  std_logic;
-  ftdi_nrts: inout  std_logic;
-  ftdi_txden: inout std_logic;
+  -- ftdi_ndtr: inout  std_logic;
+  ftdi_ndtr: in  std_logic;
+  -- ftdi_ndsr: inout  std_logic;
+  -- ftdi_nrts: inout  std_logic;
+  ftdi_nrts: in  std_logic;
+  -- ftdi_txden: inout std_logic;
 
   -- UART1 (WiFi serial)
   wifi_rxd: out   std_logic;
   wifi_txd: in    std_logic;
   -- WiFi additional signaling
-  wifi_en, wifi_gpio0, wifi_gpio2, wifi_gpio16, wifi_gpio17: inout  std_logic := 'Z'; -- '0' will disable wifi by default
+  -- wifi_en, wifi_gpio0, wifi_gpio2, wifi_gpio5, wifi_gpio16, wifi_gpio17: inout  std_logic := 'Z'; -- '0' will disable wifi by default
+  wifi_en, wifi_gpio0: inout  std_logic := 'Z'; -- '0' will disable wifi by default
+  wifi_gpio5, wifi_gpio16, wifi_gpio17: in std_logic := 'Z';
+  -- wifi_en, wifi_gpio0, wifi_gpio2, wifi_gpio5: inout  std_logic := 'Z'; -- '0' will disable wifi by default
 
   -- Onboard blinky
-  led: out std_logic_vector(7 downto 0);
+  -- led: out std_logic_vector(7 downto 0);
+  led: out std_logic_vector(7 downto 5);
   btn: in std_logic_vector(6 downto 0);
   sw: in std_logic_vector(1 to 4);
   oled_csn, oled_clk, oled_mosi, oled_dc, oled_resn: out std_logic;
 
   -- GPIO (some are shared with wifi and adc)
-  gp, gn: inout std_logic_vector(27 downto 0) := (others => 'Z');
+  -- gp, gn: inout std_logic_vector(27 downto 0) := (others => 'Z');
+  -- gp: inout std_logic_vector(27 downto 0) := (others => '0');
+  gp: in std_logic_vector(27 downto 0) := (others => 'Z');
 
   -- SHUTDOWN: logic '1' here will shutdown power on PCB >= v1.7.5
-  shutdown: out std_logic := '0';
+  -- shutdown: out std_logic := '0';
 
   -- Audio jack 3.5mm
-  audio_l, audio_r, audio_v: inout std_logic_vector(3 downto 0) := (others => 'Z');
+  -- audio_l, audio_r, audio_v: inout std_logic_vector(3 downto 0) := (others => 'Z');
 
   -- Digital Video (differential outputs)
   --gpdi_dp, gpdi_dn: out std_logic_vector(2 downto 0);
@@ -137,7 +140,8 @@ begin
           R_prog_release <= (others => '0');
         else
           if R_prog_release(R_prog_release'high) = '0' then
-            R_prog_release <= R_prog_release + 1;
+            -- R_prog_release <= R_prog_release + 1;
+            R_prog_release <= std_logic_vector(unsigned(R_prog_release) + 1);
           end if;
         end if;
       end if;
@@ -145,10 +149,10 @@ begin
 
   process(sd_clk, wifi_gpio17) -- gpio17 is OLED CSn
   begin
-    if wifi_gpio17 = '1' then
-      R_spi_miso <= '0' & btn; -- sample button state during csn=1
-    else
-      if rising_edge(sd_clk) then
+    if rising_edge(sd_clk) then
+      if wifi_gpio17 = '1' then
+        R_spi_miso <= '0' & btn; -- sample button state during csn=1
+      else
         R_spi_miso <= R_spi_miso(R_spi_miso'high-1 downto 0) & R_spi_miso(R_spi_miso'high) ; -- shift to the left
       end if;
     end if;
