@@ -1,2 +1,2 @@
-read_verilog passthru.v
+ghdl --std=08 ../Diamond/passthru.vhd -e ulx3s_passthru_wifi; synth_ecp5 -json passthru.json
 synth_ecp5 -noccu2 -nomux -nodram -json passthru.json

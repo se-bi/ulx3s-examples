@@ -8,6 +8,7 @@ RPTFILE := $(TOPMOD).rpt
 BINFILE := $(TOPMOD).bin
 SIMFILE := $(SIMPROG).cpp
 VDIRFB  := ./obj_dir
+GHDLSO ?= ghdl
 #COSIMS  := uartsim.cpp
 all: $(VCDFILE)
 
@@ -75,8 +76,8 @@ ulx3s_out.config: passthru.json
 		--lpf ulx3s_v20.lpf \
 		--textcfg ulx3s_out.config 
 
-passthru.json: passthru.ys passthru.v
-	yosys passthru.ys 
+passthru.json: passthru.ys ../Diamond/passthru.vhd
+	yosys -m $(GHDLSO) passthru.ys
 
 prog: ulx3s.bit
 	../../bin/ujprog ulx3s.bit
