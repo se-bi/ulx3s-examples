@@ -24,6 +24,7 @@ pnr:
   stage: pnr_st
   image: hdlc/nextpnr:ecp5
   before_script:
+    - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - nextpnr-ecp5 --version
   script:
     - touch */*/*.json
