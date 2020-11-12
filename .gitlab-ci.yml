@@ -5,7 +5,7 @@ stages:
 
 synth:
   stage: synth_st
-  image: ghdl/synth:beta
+  image: hdlc/ghdl:yosys
   before_script:
     - yosys --version
   script:
@@ -22,7 +22,7 @@ synth:
 
 pnr:
   stage: pnr_st
-  image: ghdl/synth:nextpnr-ecp5
+  image: hdlc/nextpnr:ecp5
   before_script:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - nextpnr-ecp5 --version
@@ -41,7 +41,7 @@ pnr:
 
 pack:
   stage: pack_st
-  image: se0bi/ghdl-synth:trellis
+  image: hdlc/prjtrellis
   before_script:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - ecppack --version
