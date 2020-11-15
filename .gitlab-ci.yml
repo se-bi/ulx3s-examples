@@ -11,7 +11,7 @@ synth:
   script:
     - >
       for i in blinky passthru;
-      do
+      do set -e;
       pushd ${i}/OpenSource;
       make ${i}.json;
       popd;
@@ -29,12 +29,14 @@ pnr:
     - apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
     - nextpnr-ecp5 --version
   script:
-    - touch */*/*.json
-    - pushd blinky/OpenSource
-    - make ulx3s_out.config
-    - popd
-    - pushd passthru/OpenSource
-    - make ulx3s_out.config
+    - >
+      for i in blinky passthru;
+      do set -e;
+      pushd ${i}/OpenSource;
+      touch ${i}.json;
+      make ulx3s_out.config;
+      popd;
+      done
   artifacts:
     paths:
     - blinky/OpenSource/ulx3s_out.config
@@ -47,13 +49,15 @@ pack:
   before_script:
     - ecppack --version
   script:
-    - touch */*/*.json
-    - touch */*/ulx3s_out.config
-    - pushd blinky/OpenSource
-    - make ulx3s.bit
-    - popd
-    - pushd passthru/OpenSource
-    - make ulx3s.bit
+    - >
+      for i in blinky passthru;
+      do set -e;
+      pushd ${i}/OpenSource;
+      touch ${i}.json;
+      touch ulx3s_out.config;
+      make ulx3s.bit;
+      popd;
+      done
   artifacts:
     paths:
     - blinky/OpenSource/ulx3s.bit
