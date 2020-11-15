@@ -9,11 +9,13 @@ synth:
   before_script:
     - yosys --version
   script:
-    - pushd blinky/OpenSource
-    - make blinky.json
-    - popd
-    - pushd passthru/OpenSource
-    - make passthru.json
+    - >
+      for i in blinky passthru
+      do
+      pushd ${i}/OpenSource
+      make ${i}.json
+      popd
+      done
   artifacts:
     paths:
     - blinky/OpenSource/blinky.json
