@@ -10,11 +10,11 @@ synth:
     - yosys --version
   script:
     - >
-      for i in blinky passthru
+      for i in blinky passthru;
       do
-      pushd ${i}/OpenSource
-      make ${i}.json
-      popd
+      pushd ${i}/OpenSource;
+      make ${i}.json;
+      popd;
       done
   artifacts:
     paths:
