@@ -1,50 +1,33 @@
 stages:
-  - synth_st
-  - pnr_st
+  - synth_pnr_st
   - pack_st
 
 synth:
-  stage: synth_st
+  stage: synth_pnr_st
   image: hdlc/impl
   before_script:
     - yosys --version
-  script:
-    - >
-      for i in blinky passthru;
-      do set -e;
-      pushd ${i}/OpenSource;
-      make ${i}.json;
-      popd;
-      done
-  artifacts:
-    paths:
-    - blinky/OpenSource/blinky.json
-    - passthru/OpenSource/passthru.json
-    expire_in: 1 week
-
-pnr:
-  stage: pnr_st
-  image: hdlc/impl
-  before_script:
     - nextpnr-ecp5 --version
   script:
     - >
       for i in blinky passthru;
       do set -e;
       pushd ${i}/OpenSource;
-      touch ${i}.json;
+      make ${i}.json;
       make ulx3s_out.config;
       popd;
       done
   artifacts:
     paths:
+    - blinky/OpenSource/blinky.json
     - blinky/OpenSource/ulx3s_out.config
+    - passthru/OpenSource/passthru.json
     - passthru/OpenSource/ulx3s_out.config
     expire_in: 1 week
 
 pack:
   stage: pack_st
-  image: hdlc/impl
+  image: hdlc/prjtrellis
   before_script:
     - ecppack --version
   script:
@@ -52,9 +35,7 @@ pack:
       for i in blinky passthru;
       do set -e;
       pushd ${i}/OpenSource;
-      touch ${i}.json;
-      touch ulx3s_out.config;
-      make ulx3s.bit;
+      ecppack ulx3s_out.config ulx3s.bit;
       popd;
       done
   artifacts:
