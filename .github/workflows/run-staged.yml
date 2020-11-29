@@ -14,7 +14,7 @@ jobs:
           yosys --version
           for i in blinky passthru;
           do set -e;
-          bash -c "set -e; pushd ${i}; make synth; popd;"
+          bash -c "set -e; pushd ${i}/OpenSource; make synth; popd;"
           done
       - name: Upload Getelevel Netlist
         uses: actions/upload-artifact@v2
@@ -37,8 +37,8 @@ jobs:
           nextpnr-ecp5 --version
           for i in blinky passthru;
           do set -e;
-          cp gatelevel-netlist/${i}/*json ${i}
-          bash -c "set -e; pushd ${i}; make pnr; popd;"
+          cp gatelevel-netlist/${i}/OpenSource/*json ${i}/OpenSource/
+          bash -c "set -e; pushd ${i}/OpenSource; make pnr; popd;"
           done
       - name: Upload Layout Netlist
         uses: actions/upload-artifact@v2
@@ -60,9 +60,9 @@ jobs:
           ecppack --version
           for i in blinky passthru;
           do set -e;
-          cp gatelevel-netlist/${i}/*json ${i}
-          cp place-and-route/${i}/*config ${i}
-          bash -c "set -e; pushd ${i}; make pack; popd;"
+          cp gatelevel-netlist/${i}/OpenSource/*json ${i}/OpenSource/
+          cp place-and-route/${i}/OpenSource/*config ${i}/OpenSource/
+          bash -c "set -e; pushd ${i}/OpenSource; make pack; popd;"
           done
       - name: Upload Bitstream
         uses: actions/upload-artifact@v2
