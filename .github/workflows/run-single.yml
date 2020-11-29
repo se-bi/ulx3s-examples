@@ -14,7 +14,7 @@ jobs:
           yosys --version
           for i in blinky passthru;
           do set -e;
-          bash -c "set -e; pushd ${i}; make pack; popd;"
+          bash -c "set -e; pushd ${i}; make ulx3s.bit; popd;"
           done
       - name: Upload Getelevel Netlist
         uses: actions/upload-artifact@v2
