@@ -1,4 +1,4 @@
-name: Build bitstreams using OpenSource toolchain
+name: (Single Job) Build bitstreams using OpenSource toolchain
 
 on:
   push:
