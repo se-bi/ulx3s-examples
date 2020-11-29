@@ -1,0 +1,36 @@
+name: Build bitstreams using OpenSource toolchain
+
+on:
+  push:
+
+jobs:
+  synth-pnr-pack:
+    runs-on: ubuntu-latest
+    container: se0bi/hdlc-impl:ecp5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Gatelevel Synthesis
+        run: |
+          yosys --version
+          for i in blinky passthru;
+          do set -e;
+          bash -c "set -e; pushd ${i}; make pack; popd;"
+          done
+      - name: Upload Getelevel Netlist
+        uses: actions/upload-artifact@v2
+        with:
+          name: gatelevel-netlist
+          path: "*/*/*.json"
+          retention-days: 7
+      - name: Upload Layout Netlist
+        uses: actions/upload-artifact@v2
+        with:
+          name: place-and-route
+          path:  "*/*/*.config"
+          retention-days: 7
+      - name: Upload Bitstream
+        uses: actions/upload-artifact@v2
+        with:
+          name: bitstream
+          path: "*/*/*.bit"
+          retention-days: 7
