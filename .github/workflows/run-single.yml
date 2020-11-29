@@ -9,7 +9,7 @@ jobs:
     container: se0bi/hdlc-impl:ecp5
     steps:
       - uses: actions/checkout@v2
-      - name: Gatelevel Synthesis
+      - name: Synthesis, PnR, Gen. Bitstream
         run: |
           yosys --version
           for i in blinky passthru;

@@ -1,0 +1,72 @@
+name: Build bitstreams using OpenSource toolchain
+
+on:
+  push:
+
+jobs:
+  synth:
+    runs-on: ubuntu-latest
+    container: hdlc/ghdl:yosys
+    steps:
+      - uses: actions/checkout@v2
+      - name: Gatelevel Synthesis
+        run: |
+          yosys --version
+          for i in blinky passthru;
+          do set -e;
+          bash -c "set -e; pushd ${i}; make synth; popd;"
+          done
+      - name: Upload Getelevel Netlist
+        uses: actions/upload-artifact@v2
+        with:
+          name: gatelevel-netlist
+          path: "*/*/*.json"
+          retention-days: 7
+
+  pnr:
+    runs-on: ubuntu-latest
+    container: hdlc/nextpnr:ecp5
+    needs: [synth]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
+      - name: Place and Route Netlist
+        run: |
+          apt update -qq && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends make
+          nextpnr-ecp5 --version
+          for i in blinky passthru;
+          do set -e;
+          cp gatelevel-netlist/${i}/*json ${i}
+          bash -c "set -e; pushd ${i}; make pnr; popd;"
+          done
+      - name: Upload Layout Netlist
+        uses: actions/upload-artifact@v2
+        with:
+          name: place-and-route
+          path:  "*/*/*.config"
+          retention-days: 7
+
+  pack:
+    runs-on: ubuntu-latest
+    container: hdlc/prjtrellis
+    needs: [pnr]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
+      - name: Pack Netlist to Bitstream
+        run: |
+          ecppack --version
+          for i in blinky passthru;
+          do set -e;
+          cp gatelevel-netlist/${i}/*json ${i}
+          cp place-and-route/${i}/*config ${i}
+          bash -c "set -e; pushd ${i}; make pack; popd;"
+          done
+      - name: Upload Bitstream
+        uses: actions/upload-artifact@v2
+        with:
+          name: bitstream
+          path: "*/*/*.bit"
+          retention-days: 7
