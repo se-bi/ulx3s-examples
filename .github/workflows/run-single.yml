@@ -6,7 +6,7 @@ on:
 jobs:
   synth-pnr-pack:
     runs-on: ubuntu-latest
-    container: se0bi/hdlc-impl:ecp5
+    container: hdlc/impl:prjtrellis
     steps:
       - uses: actions/checkout@v2
       - name: Synthesis, PnR, Gen. Bitstream
@@ -16,21 +16,21 @@ jobs:
           do set -e;
           bash -c "set -e; pushd ${i}/OpenSource; make ulx3s.bit; popd;"
           done
-      - name: Upload Getelevel Netlist
+      - name: Upload Gatelevel Netlist
         uses: actions/upload-artifact@v2
         with:
           name: gatelevel-netlist
           path: "*/*/*.json"
-          retention-days: 7
+          retention-days: 42
       - name: Upload Layout Netlist
         uses: actions/upload-artifact@v2
         with:
           name: place-and-route
           path:  "*/*/*.config"
-          retention-days: 7
+          retention-days: 42
       - name: Upload Bitstream
         uses: actions/upload-artifact@v2
         with:
           name: bitstream
           path: "*/*/*.bit"
-          retention-days: 7
+          retention-days: 42

@@ -16,7 +16,7 @@ jobs:
           do set -e;
           bash -c "set -e; pushd ${i}/OpenSource; make ${i}.json; popd;"
           done
-      - name: Upload Getelevel Netlist
+      - name: Upload Gatelevel Netlist
         uses: actions/upload-artifact@v2
         with:
           name: gatelevel-netlist
